@@ -42,8 +42,8 @@ class ImageViewer:
 
     def resize_image(self, event=None):
         # Resize image to match window size and update canvas
-        width, height = self.window.winfo_width(), self.window.winfo_height()
-        self.display_image = self.image.resize((width, height), Image.ANTIALIAS)
+        self.window_width, self.window_height = self.window.winfo_width(), self.window.winfo_height()
+        self.display_image = self.image.resize((self.window_width, self.window_height), Image.ANTIALIAS)
         self.photo_image = ImageTk.PhotoImage(self.display_image)
 
         # Clear the canvas and put the image on it
@@ -60,11 +60,21 @@ class ImageViewer:
             self.last_x = event.x
             self.last_y = event.y
         else:
+            # calculate ratio between original image size and window size
+            x_ratio = self.original_image.width / self.window_width
+            y_ratio = self.original_image.height / self.window_height
+
+            # scale the event x, y coordinates to match the original image
+            scaled_last_x = int(self.last_x * x_ratio)
+            scaled_last_y = int(self.last_y * y_ratio)
+            scaled_event_x = int(event.x * x_ratio)
+            scaled_event_y = int(event.y * y_ratio)
+
             draw = ImageDraw.Draw(self.image)
-            draw.line([(self.last_x, self.last_y), (event.x, event.y)], fill="black", width=5)
-            self.display_draw = ImageDraw.Draw(self.display_image)
-            self.display_draw.line([(self.last_x, self.last_y), (event.x, event.y)], fill="black", width=5)
+            draw.line([(scaled_last_x, scaled_last_y), (scaled_event_x, scaled_event_y)], fill="black", width=5)
+
             self.canvas.create_line(self.last_x, self.last_y, event.x, event.y, fill="black", width=5)
+
             self.last_x = event.x
             self.last_y = event.y
 
@@ -73,5 +83,6 @@ class ImageViewer:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    root.geometry("800x600")
     ImageViewer(root)
     root.mainloop()
