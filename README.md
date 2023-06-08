@@ -1,4 +1,4 @@
-# Image Viewer Application
+# Python Painting App
 
 This is a simple image viewer desktop application built using Python and Tkinter. It allows you to open, view, draw on, and crop images.
 
