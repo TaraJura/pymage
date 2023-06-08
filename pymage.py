@@ -6,6 +6,7 @@ class ImageViewer:
     def __init__(self, window):
         self.window = window
         self.window.title("Image Viewer")
+        self.window.wm_attributes('-zoomed', True)
 
         # Menu
         self.menu = tk.Menu(self.window)
